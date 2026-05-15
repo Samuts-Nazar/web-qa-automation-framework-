@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+env/
+.env
+
+# Pytest
+.pytest_cache/
+htmlcov/
+report.html
+assets/
+
+# Allure
+allure-results/
+allure-report/
+
+# Screenshots (generated on failure)
+screenshots/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
