@@ -1,10 +1,9 @@
+import allure
 from playwright.sync_api import Page
 from pages.base_page import BasePage
 
 
 class CartPage(BasePage):
-    """Page object for the Sauce Demo cart page."""
-
     URL = "https://www.saucedemo.com/cart.html"
 
     def __init__(self, page: Page):
@@ -13,25 +12,25 @@ class CartPage(BasePage):
         self.checkout_button = page.locator("[data-test='checkout']")
         self.continue_shopping_button = page.locator("[data-test='continue-shopping']")
 
+    @allure.step("Отримання кількості товарів у кошику")
     def get_item_count(self) -> int:
-        """Return the number of items in the cart."""
         return self.cart_items.count()
 
+    @allure.step("Отримання списку назв товарів у кошику")
     def get_item_names(self) -> list[str]:
-        """Return a list of item names in the cart."""
         return self.page.locator("[data-test='inventory-item-name']").all_inner_texts()
 
+    @allure.step("Видалення товару '{item_name}' з кошика")
     def remove_item(self, item_name: str):
-        """Remove a specific item from the cart by its name."""
         item = self.page.locator(
             f"[data-test='cart-item']:has-text('{item_name}')"
         )
-        item.locator("button").click()
+        item.locator("[data-test^='remove']").click()
 
+    @allure.step("Перехід до оформлення замовлення (Натискання кнопки Checkout)")
     def proceed_to_checkout(self):
-        """Click the Checkout button."""
         self.checkout_button.click()
 
+    @allure.step("Повернення до покупок (Натискання кнопки Continue Shopping)")
     def continue_shopping(self):
-        """Click Continue Shopping to go back to the inventory."""
         self.continue_shopping_button.click()

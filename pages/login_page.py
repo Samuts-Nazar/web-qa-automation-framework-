@@ -1,10 +1,9 @@
+import allure
 from playwright.sync_api import Page
 from pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
-    """Page object for the Sauce Demo login page."""
-
     URL = "https://www.saucedemo.com"
 
     def __init__(self, page: Page):
@@ -14,20 +13,20 @@ class LoginPage(BasePage):
         self.login_button = page.locator("[data-test='login-button']")
         self.error_message = page.locator("[data-test='error']")
 
+    @allure.step("Відкриття сторінки логіну")
     def open(self):
-        """Navigate to the login page."""
         self.navigate(self.URL)
 
+    @allure.step("Логін як '{username}'")
     def login(self, username: str, password: str):
-        """Fill credentials and submit the login form."""
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()
 
+    @allure.step("Отримання тексту повідомлення про помилку")
     def get_error_message(self) -> str:
-        """Return the text of the error message."""
         return self.error_message.inner_text()
 
+    @allure.step("Перевірка видимості повідомлення про помилку")
     def is_error_visible(self) -> bool:
-        """Return True if the error message is visible."""
         return self.error_message.is_visible()

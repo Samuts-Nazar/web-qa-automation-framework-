@@ -1,10 +1,9 @@
+import allure
 from playwright.sync_api import Page
 from pages.base_page import BasePage
 
 
 class InventoryPage(BasePage):
-    """Page object for the Sauce Demo inventory (products) page."""
-
     URL = "https://www.saucedemo.com/inventory.html"
 
     def __init__(self, page: Page):
@@ -14,34 +13,34 @@ class InventoryPage(BasePage):
         self.cart_badge = page.locator("[data-test='shopping-cart-badge']")
         self.cart_link = page.locator("[data-test='shopping-cart-link']")
 
+    @allure.step("Отримання кількості товарів на сторінці")
     def get_item_count(self) -> int:
-        """Return the number of items visible on the page."""
         return self.inventory_items.count()
 
+    @allure.step("Сортування товарів за опцією '{option}'")
     def sort_by(self, option: str):
-        """Select a sort option. Available: 'az', 'za', 'lohi', 'hilo'."""
         self.sort_dropdown.select_option(option)
 
+    @allure.step("Отримання списку назв товарів")
     def get_item_names(self) -> list[str]:
-        """Return a list of all visible product names."""
         return self.page.locator("[data-test='inventory-item-name']").all_inner_texts()
 
+    @allure.step("Отримання списку цін товарів")
     def get_item_prices(self) -> list[float]:
-        """Return a list of all visible product prices as floats."""
         raw = self.page.locator("[data-test='inventory-item-price']").all_inner_texts()
         return [float(p.replace("$", "")) for p in raw]
 
+    @allure.step("Додавання товару '{item_name}' у кошик")
     def add_item_to_cart(self, item_name: str):
-        """Add a specific item to the cart by its name."""
         item = self.page.locator(
             f"[data-test='inventory-item']:has-text('{item_name}')"
         )
         item.locator("button").click()
 
+    @allure.step("Отримання значення лічильника кошика")
     def get_cart_badge_count(self) -> int:
-        """Return the number shown on the cart badge."""
         return int(self.cart_badge.inner_text())
 
+    @allure.step("Перехід у кошик")
     def go_to_cart(self):
-        """Click the cart icon to navigate to the cart page."""
         self.cart_link.click()
