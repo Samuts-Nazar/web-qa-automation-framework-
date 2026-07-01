@@ -1,193 +1,169 @@
-# 🧪 Web QA Automation Framework
-
+# Web QA Automation Framework
 [![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.49.0-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev/)
 [![pytest](https://img.shields.io/badge/pytest-8.3.4-0A9EDC?style=flat-square&logo=pytest&logoColor=white)](https://pytest.org/)
 [![Allure](https://img.shields.io/badge/Allure-2.13.5-orange?style=flat-square)](https://allurereport.org/)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/features/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 
-> **Дипломна робота** | Кваліфікаційний проєкт з автоматизації тестування веб-застосунків на основі патерну Page Object Model із використанням Playwright, pytest та інтеграцією CI/CD.
+Фреймворк для автоматизованого тестування веб-застосунків, створений у межах дипломної роботи на основі **Page Object Model (POM)**, **Playwright**, **pytest** та **GitHub Actions**.
 
----
-
-## 📋 Зміст
-
-- [Про проєкт](#-про-проєкт)
-- [Стек технологій](#-стек-технологій)
-- [Архітектура фреймворку](#-архітектура-фреймворку)
-- [Структура проєкту](#-структура-проєкту)
-- [Встановлення та запуск](#-встановлення-та-запуск)
-- [Запуск тестів](#-запуск-тестів)
-- [Звітність](#-звітність)
-- [CI/CD Pipeline](#-cicd-pipeline)
-- [Патерни та принципи](#-патерни-та-принципи)
-- [Автор](#-автор)
+Як об’єкт тестування використовується демонстраційний e-commerce застосунок **SauceDemo**: https://www.saucedemo.com
 
 ---
 
-## 🎯 Про проєкт
+## Зміст
 
-Цей репозиторій містить **фреймворк для автоматизованого тестування веб-застосунків**, розроблений у рамках дипломної роботи. Як об'єкт тестування обрано демонстраційний e-commerce застосунок [SauceDemo](https://www.saucedemo.com) — платформу, що широко використовується в індустрії для відпрацювання навичок QA-автоматизації.
-
-**Ключові особливості фреймворку:**
-
-- **Page Object Model (POM)** — чітке розділення логіки тестів та взаємодії з UI
-- **Headless-режим** — браузерні тести виконуються без графічного інтерфейсу (швидко та стабільно)
-- **Автоматичні скріншоти** при падінні тестів — спрощує діагностику помилок
-- **Мульти-рівнева звітність** — Allure Report + HTML-звіт pytest
-- **CI/CD інтеграція** — автоматичний запуск тестів через GitHub Actions
-- **Маркування тестів** — розділення на `smoke` та `regression` набори
+- [Проєкт](#проєкт)
+- [Технології](#технології)
+- [Архітектура](#архітектура)
+- [Структура репозиторію](#структура-репозиторію)
+- [Встановлення та запуск](#встановлення-та-запуск)
+- [Запуск тестів](#запуск-тестів)
+- [Звітність](#звітність)
+- [CI/CD](#cicd)
+- [Підхід до побудови фреймворку](#підхід-до-побудови-фреймворку)
 
 ---
 
-## 🛠 Стек технологій
+## Проєкт
+
+Репозиторій містить фреймворк для UI-автоматизації тестування вебзастосунку SauceDemo. Основна мета проєкту — показати практичну реалізацію стабільного, підтримуваного та масштабованого тестового рішення для дипломної роботи.
+
+### Основні можливості
+
+- реалізація патерну **Page Object Model**
+- запуск браузерних тестів у **headless**-режимі
+- автоматичне створення **скріншотів** при падінні тестів
+- генерація **Allure**-даних
+- генерація **HTML-звіту** через `pytest-html`
+- поділ тестів на набори `smoke` і `regression`
+- автоматичний запуск тестів через **GitHub Actions**
+
+---
+
+## Технології
 
 | Інструмент | Версія | Призначення |
-|---|---|---|
-| **Python** | 3.12+ | Основна мова розробки |
-| **Playwright** | 1.49.0 | Керування браузером (Chromium) |
-| **pytest** | 8.3.4 | Фреймворк для запуску тестів |
-| **pytest-playwright** | 0.6.2 | Інтеграція Playwright з pytest |
-| **Allure pytest** | 2.13.5 | Генерація деталізованих звітів |
-| **pytest-html** | 4.1.1 | HTML-звіти для тестових сесій |
-| **GitHub Actions** | — | CI/CD автоматизація |
+|---|---:|---|
+| Python | 3.12+ | Основна мова розробки |
+| Playwright | 1.49.0 | Автоматизація браузера Chromium |
+| pytest | 8.3.4 | Запуск і організація тестів |
+| pytest-playwright | 0.6.2 | Інтеграція Playwright з pytest |
+| allure-pytest | 2.13.5 | Формування Allure-даних |
+| pytest-html | 4.1.1 | Формування HTML-звіту |
+| GitHub Actions | — | CI/CD-автоматизація |
 
 ---
 
-## 🏗 Архітектура фреймворку
+## Архітектура
 
-Фреймворк побудований за патерном **Page Object Model**, де кожна сторінка застосунку представлена окремим класом, що інкапсулює всі взаємодії з її елементами.
+Фреймворк побудований за принципом **Page Object Model**: логіка взаємодії зі сторінками винесена в окремі класи, а тести працюють через методи цих класів.
 
-```
-┌─────────────────────────────────────────────────┐
-│                  Test Layer                     │
-│           tests/ (pytest test cases)            │
-└─────────────────────┬───────────────────────────┘
-                      │ використовує
-┌─────────────────────▼───────────────────────────┐
-│               Page Object Layer                 │
-│         pages/ (LoginPage, InventoryPage…)      │
-└─────────────────────┬───────────────────────────┘
-                      │ взаємодіє
-┌─────────────────────▼───────────────────────────┐
-│             Browser / Playwright                │
-│     Chromium (headless) via sync_playwright     │
-└─────────────────────────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────┐
-│              Test Infrastructure                │
-│  conftest.py: fixtures, hooks, screenshots      │
-│  pytest.ini:  markers, base_url, testpaths      │
-└─────────────────────────────────────────────────┘
+Схема взаємодії:
+
+```text
+tests/  →  pages/  →  Playwright (Chromium)
+   │           │
+   │           └── інкапсульована робота з локаторами та діями
+   └── перевірки бізнес-сценаріїв і асерти
 ```
 
-### Ключові фікстури (`conftest.py`)
+### Базові компоненти
 
-| Фікстура | Scope | Опис |
+- `pages/base_page.py` — базовий клас для сторінок
+- `pages/login_page.py` — сторінка логіну
+- `conftest.py` — фікстури, логіка підготовки сторінки та хук для скріншотів
+- `pytest.ini` — базовий URL, маркери тестів, шлях до тестів
+
+### Фікстури
+
+| Фікстура | Scope | Призначення |
 |---|---|---|
-| `browser` | `session` | Одна Chromium-інстанція на всю сесію |
-| `page` | `function` | Новий браузерний контекст для кожного тесту |
-| `authenticated_page` | `function` | Сторінка з вже виконаним логіном (`standard_user`) |
+| `browser` | `session` | Один екземпляр Chromium на всю сесію |
+| `page` | `function` | Нова сторінка для кожного тесту |
+| `authenticated_page` | `function` | Сторінка після логіну як `standard_user` |
 
 ---
 
-## 📁 Структура проєкту
+## Структура репозиторію
 
-```
-web-qa-automation-framework/
-│
+```text
+web-qa-automation-framework-/
 ├── .github/
-│   └── workflows/          # GitHub Actions CI/CD pipeline
-│
-├── pages/                  # Page Object Model класи
-│   └── login_page.py       # Клас сторінки логіну
-│
-├── tests/                  # Тестові сценарії
-│
-├── screenshots/            # Скріншоти при падінні тестів (auto-generated)
-│
-├── conftest.py             # pytest-фікстури та хуки
-├── pytest.ini              # Конфігурація pytest (маркери, шляхи)
-├── requirements.txt        # Залежності проєкту
+│   └── workflows/
+│       └── tests.yml
+├── pages/
+│   ├── base_page.py
+│   └── login_page.py
+├── tests/
+├── screenshots/
+├── conftest.py
+├── pytest.ini
+├── requirements.txt
+├── README.md
 └── .gitignore
 ```
 
 ---
 
-## 🚀 Встановлення та запуск
+## Встановлення та запуск
 
-### Передумови
-
-- Python **3.12** або новіший
-- Git
-
-### 1. Клонування репозиторію
+### 1. Клонувати репозиторій
 
 ```bash
-git clone https://github.com/Trenerkok/web-qa-automation-framework-.git
+git clone https://github.com/Samuts-Nazar/web-qa-automation-framework-.git
 cd web-qa-automation-framework-
 ```
 
-### 2. Створення віртуального середовища
-
-```bash
-python -m venv .venv
-
-# Windows
-.venv\Scripts\activate
-
-# macOS / Linux
-source .venv/bin/activate
-```
-
-### 3. Встановлення залежностей
+### 2. Встановити залежності
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Встановлення браузерів Playwright
+### 3. Встановити браузер Playwright
 
 ```bash
 playwright install chromium
 ```
 
+> У CI використовується автоматичне встановлення браузерів із системними залежностями через `playwright install --with-deps`.
+
 ---
 
-## ▶️ Запуск тестів
+## Запуск тестів
 
-### Запуск усіх тестів
+### Усі тести
 
 ```bash
 pytest
 ```
 
-### Запуск лише smoke-тестів
+### Smoke-тести
 
 ```bash
 pytest -m smoke
 ```
 
-### Запуск лише regression-тестів
+### Regression-тести
 
 ```bash
 pytest -m regression
 ```
 
-### Запуск з детальним виводом
+### Детальний вивід
 
 ```bash
 pytest -v
 ```
 
-### Запуск з генерацією Allure-даних
+### Зібрати Allure-дані
 
 ```bash
 pytest --alluredir=allure-results
 ```
 
-### Запуск з генерацією HTML-звіту
+### Зібрати HTML-звіт
 
 ```bash
 pytest --html=report.html --self-contained-html
@@ -195,79 +171,77 @@ pytest --html=report.html --self-contained-html
 
 ---
 
-## 📊 Звітність
+## Звітність
 
-### Allure Report
+### Allure
 
-Після запуску тестів з параметром `--alluredir`:
+Після запуску тестів з параметром `--alluredir=allure-results` формуються сирі дані для Allure-звіту.
+
+Для локального перегляду можна використати:
 
 ```bash
-# Відкрити звіт у браузері
 allure serve allure-results
 ```
-
-Allure надає:
-- Детальну хронологію тестового запуску
-- Статистику проходження по маркерах та сьютах
-- Вбудовані скріншоти при падінні тестів
-- Історію запусків та тренди
 
 ### HTML-звіт pytest
 
 ```bash
 pytest --html=report.html --self-contained-html
-# Відкрити report.html у браузері
 ```
 
-### Скріншоти при падінні
+### Скриншоти при падінні тестів
 
-Фреймворк автоматично зберігає скріншот у папку `screenshots/` при будь-якому падінні тесту. Назва файлу відповідає ідентифікатору тесту, що полегшує діагностику.
-
----
-
-## ⚙️ CI/CD Pipeline
-
-Кожен `push` та `pull request` до гілки `main` автоматично запускає повний набір тестів через **GitHub Actions**.
-
-```yaml
-# .github/workflows/ci.yml
-# Тригери: push / pull_request → main
-# Кроки:
-#   1. Checkout коду
-#   2. Налаштування Python 3.12
-#   3. pip install -r requirements.txt
-#   4. playwright install chromium
-#   5. pytest (headless Chromium)
-#   6. Публікація Allure / HTML звіту як артефакту
-```
-
-Результати запусків доступні у вкладці **Actions** репозиторію.
+Хук `pytest_runtest_makereport` автоматично зберігає скріншот у папку `screenshots/`, якщо тест падає на етапі виконання.
 
 ---
 
-## 🧩 Патерни та принципи
+## CI/CD
 
-### Page Object Model (POM)
+У репозиторії налаштований workflow `tests.yml`, який автоматично запускається при:
 
-Кожна сторінка — окремий Python-клас. Тести взаємодіють лише з методами класу, а не з локаторами напряму. Це забезпечує:
-- **Повторне використання** коду між тестами
-- **Легку підтримку** при зміні UI (правити лише один клас)
-- **Читабельність** тестів на рівні бізнес-логіки
+- `push` у гілку `main`
+- `pull_request` у гілку `main`
 
-### Fixture-based setup (pytest)
+### Що виконується в CI
 
-Використання `conftest.py` із scope-контролем (`session` / `function`) мінімізує накладні витрати на запуск браузера та забезпечує ізоляцію між тестами.
+- checkout коду
+- налаштування Python
+- встановлення залежностей із `requirements.txt`
+- встановлення Playwright браузерів
+- запуск `pytest --alluredir=allure-results`
+- завантаження артефакту `allure-results`
 
-### Fail-fast Screenshots
+### Середовище CI
 
-Хук `pytest_runtest_makereport` автоматично захоплює стан екрану при провалі тесту — без жодного додаткового коду в самих тестах.
+- `ubuntu-latest`
+- Python 3.11 у поточному workflow
 
-### Тест-маркування
+### Тривалість збереження артефактів
 
-Набори `smoke` і `regression` дозволяють гнучко вибирати обсяг тестування залежно від контексту (швидка перевірка після деплою vs. повний регресійний запуск).
+- `allure-results` зберігаються як артефакт на 15 днів
 
 ---
 
-## 📄 Ліцензія
+## Підхід до побудови фреймворку
 
-Цей проєкт розповсюджується під ліцензією [MIT](https://opensource.org/licenses/MIT).
+### Page Object Model
+
+Кожна сторінка представлена окремим класом. Це спрощує супровід і зменшує кількість дублювання в тестах.
+
+### pytest fixtures
+
+Фікстури в `conftest.py` централізують підготовку браузера та тестового контексту.
+
+### Headless execution
+
+Тести запускаються без графічного інтерфейсу, що підвищує швидкість та стабільність у CI.
+
+### Маркування тестів
+
+Маркер `smoke` використовується для швидкої перевірки критичних сценаріїв, а `regression` — для повного набору перевірок.
+
+---
+
+## Примітка
+
+Репозиторій є навчально-дипломним проєктом і може оновлюватися в міру розвитку фреймворку та тестового набору.
